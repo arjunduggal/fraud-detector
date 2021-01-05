@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <property name="LOG_PATH" value="logs"/>
+	<property resource="application.properties"/>
+    <property name="LOG_PATH" value="${logging.folder.path}"/>
     <appender name="SAVE-TO-FILE"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_PATH}/console.log</file>
