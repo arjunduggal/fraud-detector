@@ -38,7 +38,7 @@ A credit card transaction comprises the following elements.
 
 Example:
 ```
-10d7ce2f43e35fa57d1bbf8b1e2, 2014-04-29T13:15:54, 10.00
+10d7ce2f43e35fa57d1bbf8b1e2,2014-04-29T13:15:54,10.00
 ```
 
 A credit card will be identified as fraudulent if the sum of amounts for a unique hashed credit
