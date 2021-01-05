@@ -14,11 +14,11 @@ public class Constants {
 
   public static final String YYYY_MM_DD_T_HH_MM_SS = "yyyy-MM-dd'T'HH:mm:ss";
 
-  public static final String INVALID_AMOUNT = "Invalid amount found for the transaction record.{0}";
+  public static final String INVALID_AMOUNT = "Error in processing due to invalid amount found for the transaction record.\n{0}";
 
-  public static final String INVALID_DATE = "Invalid date found for the transaction record.\n{0}";
+  public static final String INVALID_DATE = "Error in processing due to invalid date found for the transaction record.\n{0}";
 
-  public static final String INVALID_TRANSACTION_RECORD = "Invalid transaction record found in the file.\n{0}";
+  public static final String INVALID_TRANSACTION_RECORD = "Error in processing due to invalid transaction record found in the file.\n{0}";
 
   public static final String CACHE_DATA_IS_NOT_IN_SYNC =
       "The cache data is not in sync for credit card {0}. Please check the debug logs for further details.";
@@ -39,6 +39,8 @@ public class Constants {
   public static final String NO_FRAUD_DETAILS_FOUND = "****No Fraud cards found!!****";
   
   public static final String FRAUD_DETAILS_FOUND = "****Please find below the Fraud Card Details.****";
+
+  public static final String PROCESSING_ERROR = "An error has occurred while processing the file. Please check the log file for further details.";
 
   private Constants() {
     // Added to avoid object instantiation
