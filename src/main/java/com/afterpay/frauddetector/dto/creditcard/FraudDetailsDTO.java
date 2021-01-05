@@ -1,13 +1,17 @@
 package com.afterpay.frauddetector.dto.creditcard;
 
+import java.io.Serializable;
+
 /**
  * The fraud details data transfer object
  *
  * @author arjunduggal
  */
-public class FraudDetailsDTO {
+public class FraudDetailsDTO implements Serializable {
 
-    private String hashedCreditCard;
+  private static final long serialVersionUID = -2415667843716802591L;
+  
+  private String hashedCreditCard;
 
     public FraudDetailsDTO(final String hashedCreditCard) {
         this.hashedCreditCard = hashedCreditCard;

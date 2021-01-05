@@ -35,6 +35,10 @@ public class Constants {
       "Please pass a valid filename and threshold value as below. \n"
           + "mvn -q spring-boot:run -Dspring-boot.run.arguments=\"--threshold=<threshold-value> --filename=<filename-value>\" \n\n"
           + "In case you are running it via JAR file, use: \njava -jar <path>/fraud-detector-1.0.0-SNAPSHOT.jar  --threshold=<threshold-value> --filename=<filename-value>";
+  
+  public static final String NO_FRAUD_DETAILS_FOUND = "****No Fraud cards found!!****";
+  
+  public static final String FRAUD_DETAILS_FOUND = "****Please find below the Fraud Card Details.****";
 
   private Constants() {
     // Added to avoid object instantiation
