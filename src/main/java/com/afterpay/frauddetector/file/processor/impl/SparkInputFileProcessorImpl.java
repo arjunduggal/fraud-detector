@@ -83,7 +83,7 @@ public class SparkInputFileProcessorImpl implements InputFileProcessor, Serializ
             }
         } catch (final Exception e) {
             LOGGER.error(e.getMessage(), e);
-            System.out.println("An error has occurred while processing the file. Please check the log file for further details.");
+            System.out.println(Constants.PROCESSING_ERROR);
         } finally {
             Optional.ofNullable(sparkContext).ifPresent(context -> contextHandler.closeContext(context));
         }
@@ -99,15 +99,21 @@ public class SparkInputFileProcessorImpl implements InputFileProcessor, Serializ
     private CreditCardTransactionDTO getTransaction(final String input) throws AfterPayBusinessException {
         final String[] transactionData = input.split(",");
 
+        if (transactionData.length != 3) {
+            System.out.println(MessageFormat.format(Constants.INVALID_TRANSACTION_RECORD, input));
+            throw new AfterPayBusinessException(MessageFormat.format(Constants.INVALID_TRANSACTION_RECORD, input));
+        }
+
         try {
-            final LocalDateTime dateTime = DateTimeUtil.parse(transactionData[1], Constants.YYYY_MM_DD_T_HH_MM_SS);
-            final BigDecimal amount = BigDecimal.valueOf(Double.parseDouble(transactionData[2]));
-            return new CreditCardTransactionDTO(transactionData[0], dateTime, amount);
-        } catch (final ArrayIndexOutOfBoundsException aIOBException) {
-            throw new AfterPayBusinessException(MessageFormat.format(Constants.INVALID_TRANSACTION_RECORD, input), aIOBException);
+            final LocalDateTime dateTime =
+                DateTimeUtil.parse(transactionData[1].trim(), Constants.YYYY_MM_DD_T_HH_MM_SS);
+            final BigDecimal amount = BigDecimal.valueOf(Double.parseDouble(transactionData[2].trim()));
+            return new CreditCardTransactionDTO(transactionData[0].trim(), dateTime, amount);
         } catch (final DateTimeParseException dtpException) {
+            System.out.println(MessageFormat.format(Constants.INVALID_DATE, input));
             throw new AfterPayBusinessException(MessageFormat.format(Constants.INVALID_DATE, input), dtpException);
         } catch (final NumberFormatException nFException) {
+            System.out.println(MessageFormat.format(Constants.INVALID_AMOUNT, input));
             throw new AfterPayBusinessException(MessageFormat.format(Constants.INVALID_AMOUNT, input), nFException);
         }
     }
