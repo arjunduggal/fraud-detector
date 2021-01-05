@@ -75,7 +75,8 @@ Note: Java in-memory maps have been used as cache in the applicaton as of now. I
 ## Assumptions Taken
 1. The combination of hashed credit card and timestamp will always be unique in the csv file, i.e. only single transaction can happen for a credit card at a time. 
    **Note**: For future, a unique transaction ID can be added in the csv file and can be used to overcome this assumption.
-2. In case there is a fraud for same card multiple times, it will be printed in the output multiple times. 
+2. In case there is a fraud for same card multiple times, it will be printed in the output multiple times.
+3. A single transaction price will always be less than or equal to threshold price.
 
 
 ## Application Logs
