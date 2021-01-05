@@ -8,14 +8,20 @@ Technology Stack used:
 
 # Getting Started
 
-In order to run the application, you can use either of the below two options.
+### Application Prerequisites
+- Java 11
+- Maven
+
+In order to run the application, you can use the below command.
 ```
-1. mvn -q spring-boot:run -Dspring-boot.run.arguments="--threshold=<threshold-value> --filename=<filename-value>"
+mvn -q spring-boot:run -Dspring-boot.run.arguments="--threshold=<threshold-value> --filename=<filename-value>"
 
 ```
+You can also run the application by creating the Snapshot JAR file and using the same.
 
 ```
-2. java -jar <path>/fraud-detector-1.0.0-SNAPSHOT.jar  --threshold=<threshold-value> --filename=<filename-value>
+mvn clean install
+java -jar <path>/fraud-detector-1.0.0-SNAPSHOT.jar  --threshold=<threshold-value> --filename=<filename-value>
 ```
 
 The below arguments are mandatory and need to be passed in the above commands.
@@ -34,9 +40,6 @@ Example:
 ```
 10d7ce2f43e35fa57d1bbf8b1e2, 2014-04-29T13:15:54, 10.00
 ```
-#####Assumption
-The combination of hashed credit card and timestamp will always be unique in the csv file, i.e. only single transaction can happen for a credit card at a time. 
-**Note**: For future, a unique transaction ID can be added in the csv file and can be used to overcome this assumption.
 
 A credit card will be identified as fraudulent if the sum of amounts for a unique hashed credit
 card number over a 24-hour sliding window period exceeds the threshold amount passed in the arguments.
@@ -54,7 +57,7 @@ The default location of the file has been set to be E:// drive. It can be change
 
 Note: The file-location property or argument needs a trailing slash.
 
-####Fraud Window Settings
+##### Fraud Window Settings
 The fraud window time has been made configurable and can be updated in the application.properties if required in future.
 ```
 fraud.detection.window=<value in defined chrono unit>
@@ -62,18 +65,13 @@ fraud.detection.chrono-unit=<Chrono unit enum value>
 ```
 Please refer to https://docs.oracle.com/javase/8/docs/api/java/time/temporal/ChronoUnit.html for possible enum values of Chrono Unit.
 
-## Application Prerequisites
-- Java 11
-- Maven
+##### Assumptions Taken
+1. The combination of hashed credit card and timestamp will always be unique in the csv file, i.e. only single transaction can happen for a credit card at a time. 
+   **Note**: For future, a unique transaction ID can be added in the csv file and can be used to overcome this assumption.
+2. In case there is a fraud for same card multiple times, it will be printed in the output multiple times. 
 
-## Design
 
+## Application Design
+TODO
 
-## Reference Documentation
-For further reference, please consider the following sections:
-
-* [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
-* [Spring Boot Maven Plugin Reference Guide](https://docs.spring.io/spring-boot/docs/2.4.1/	maven-plugin/reference/html/)
-* [Create an OCI image](https://docs.spring.io/spring-boot/docs/2.4.1/maven-plugin/reference/html/#build-image)
-* [Spring Boot DevTools](https://docs.spring.io/spring-boot/docs/2.4.1/reference/htmlsingle/#using-boot-devtools)
 
