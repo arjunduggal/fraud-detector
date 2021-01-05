@@ -11,11 +11,14 @@ import java.util.stream.StreamSupport;
 
 import com.afterpay.frauddetector.constants.Constants;
 import com.afterpay.frauddetector.dto.creditcard.CreditCardTransactionDTO;
+import com.afterpay.frauddetector.dto.creditcard.FraudDetailsDTO;
 import com.afterpay.frauddetector.exception.AfterPayBusinessException;
 import com.afterpay.frauddetector.file.processor.InputFileProcessor;
 import com.afterpay.frauddetector.handler.SparkContextHandler;
 import com.afterpay.frauddetector.service.FraudDetectionService;
 import com.afterpay.frauddetector.util.DateTimeUtil;
+
+import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,19 +62,25 @@ public class SparkInputFileProcessorImpl implements InputFileProcessor, Serializ
         JavaSparkContext sparkContext = null;
         try {
             sparkContext = contextHandler.initializeContext(Constants.APP_NAME);
-            sparkContext.textFile(file)
-                        .filter(input -> input.length() > 0)
-                        .map(input -> getTransaction(input))
-                        .mapToPair(transaction -> new Tuple2<>(transaction.getHashedCreditCard(), transaction))
-                        .groupByKey()
-                        .flatMap(transactionMap -> StreamSupport.stream(transactionMap._2.spliterator(), false)
-                                                                .sorted((transactionA, transactionB) -> transactionA.getTimestamp().compareTo(transactionB.getTimestamp()))
-                                                                .map(transaction -> fraudDetectionService.processTransaction(transaction))
-                                                                .filter(Optional::isPresent)
-                                                                .map(Optional::get)
-                                                                .collect(Collectors.toSet())
-                                                                .iterator())
-                        .foreach(fraudCreditCard -> System.out.println(fraudCreditCard.getHashedCreditCard()));
+            JavaRDD<FraudDetailsDTO> fraudDetails = sparkContext.textFile(file)
+                  .filter(input -> input.length() > 0)
+                  .map(input -> getTransaction(input))
+                  .mapToPair(transaction -> new Tuple2<>(transaction.getHashedCreditCard(), transaction))
+                  .groupByKey()
+                  .flatMap(transactionMap -> StreamSupport.stream(transactionMap._2.spliterator(), false)
+                                                          .sorted((transactionA, transactionB) -> transactionA.getTimestamp().compareTo(transactionB.getTimestamp()))
+                                                          .map(transaction -> fraudDetectionService.processTransaction(transaction))
+                                                          .filter(Optional::isPresent)
+                                                          .map(Optional::get)
+                                                          .collect(Collectors.toSet())
+                                                          .iterator());
+            if (fraudDetails.isEmpty()) {
+                System.out.println(Constants.NO_FRAUD_DETAILS_FOUND);
+            } else {
+                System.out.println(Constants.FRAUD_DETAILS_FOUND); 
+                fraudDetails.foreach(
+                    fraudCreditCard -> System.out.println(fraudCreditCard.getHashedCreditCard()));
+            }
         } catch (final Exception e) {
             LOGGER.error(e.getMessage(), e);
             System.out.println("An error has occurred while processing the file. Please check the log file for further details.");
