@@ -84,7 +84,7 @@ Note: Java in-memory maps have been used as cache in the applicaton as of now. I
 
 
 ## Application Logs
-All the application logs will be printed to the console.log file in the 'log' folder. The path of the log file can be updated by changing the below property.  The log file will be moved to <logging.folder.path>/archive folder on a daily basis as per the logging configuration.
+All the application logs will be printed to the console.log file in the 'logs' folder. The path of the log file can be updated by changing the below property.  The log file will be moved to <logging.folder.path>/archive folder on a daily basis as per the logging configuration.
  ```
  logging.folder.path=logs
  ```
